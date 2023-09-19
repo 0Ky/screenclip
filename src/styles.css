@@ -1,0 +1,43 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.list {
+  margin: 0;
+}
+
+
+
+.ios {
+  --f7-range-knob-size: 9px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-link {
+  transition: color 0.55s;
+}
+
+.bg-color-primary {
+  background-color: red !important;
+}
+
+/* .page {
+  background: url("");
+  background-repeat: repeat;
+} */
+
+.custom-backdrop {
+  background-color: rgba(var(--f7-navbar-bg-color-rgb, var(--f7-bars-bg-color-rgb)), var(--f7-bars-translucent-opacity));
+  -webkit-backdrop-filter: saturate(180%) blur(var(--f7-bars-translucent-blur));
+  backdrop-filter: saturate(180%) blur(var(--f7-bars-translucent-blur));
+}
+
+.item-input-outline.item-content .item-floating-label {
+  background-color: transparent !important;
+}
+ 
