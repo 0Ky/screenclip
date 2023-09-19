@@ -2,12 +2,12 @@
 
 Screenclip is an experimental video snipping tool for Windows. It uses DXGI Desktop Duplication API to capture videos from your screen with ease and efficiency.
 
-# 🌟 Features
+## 🌟 FEATURES
 - High-Efficiency Captures: Utilizes DXGI Desktop Duplication API for high framerate recordings.
 
 - Optimized for Windows: Crafted specifically for the Windows environment to ensure compatibility and high performance.
 
-# 🛠️ TO DO:
+## 🛠️ TO DO:
 
 - Incorporate low-level window configurations:
 
@@ -21,7 +21,17 @@ Screenclip is an experimental video snipping tool for Windows. It uses DXGI Desk
 
 - Unspaghettify codebase
 
-# ⚠️ WARNING DISCLAIMER
+## 👷 BUILD INSTRUCTIONS
+### Using MSYS2 environment
+1. Install [NodeJS](https://nodejs.org/en/download).
+2. Install Tauri [prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) (C++ Build Tools, WebView2 and Rust).
+3. Install [MSYS2 MinGW64](https://www.msys2.org/#installation).
+4. Follow FFmpeg [build instructions](https://github.com/zmwangx/rust-ffmpeg/wiki/Notes-on-building#gnu-toolchain) for the GNU toolchain.
+5. When you launch MinGW64, run `pacman -Syu` a few times to update, then run the command `export PATH="/c/Program Files/nodejs/:$PATH"` to add Node.js to the PATH environment variable.
+6. Clone this repo: `git clone -b dev --recursive-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
+7. Once you're in the cloned folder run `npm install`, then `npm run tauri dev` to run in development mode or `npm run tauri build` to build in release mode.
+
+## ⚠️ WARNING DISCLAIMER
 
 This project is in an experimental and incomplete state, it comes with all the quirks you'd expect. This software is more unpredictable than a cat on a keyboard and it's provided "AS-IS", without the slightest assurance, guarantee, or pinky promise of any kind. Not even the implied warranty that it will work while you’re showcasing it to your boss or during that one crucial presentation.
 
