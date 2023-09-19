@@ -28,7 +28,7 @@ A lightweight system tray application built with the Tauri framework, utilizing 
 3. Install [MSYS2 MinGW64](https://www.msys2.org/#installation).
 4. Follow FFmpeg [build instructions](https://github.com/zmwangx/rust-ffmpeg/wiki/Notes-on-building#gnu-toolchain) for the GNU toolchain.
 5. When you launch MinGW64, run `pacman -Syu` a few times to update, then run the command `export PATH="/c/Program Files/nodejs/:$PATH"` to add Node.js to the PATH environment variable.
-6. Clone this repo: `git clone -b dev --recursive-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
+6. Clone this repo: `git clone -b dev --recurse-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
 7. Once you're in the cloned folder run `npm install`, then `npm run tauri dev` to run in development mode or `npm run tauri build` to build in release mode.
 
 ## ⚠️ WARNING DISCLAIMER
