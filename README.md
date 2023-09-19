@@ -1,6 +1,6 @@
 # Screenclip
 
-Screenclip is an experimental video snipping tool for Windows. It uses DXGI Desktop Duplication API to capture videos from your screen with ease and efficiency.
+A lightweight system tray application built with the Tauri framework, utilizing Rust for backend operations and Vanilla JS for the frontend. The application leverages the DXGI Desktop Duplication API to provide low-latency, direct access to desktop frames, allowing users to video record selected areas of their screen similar to the snipping tool.
 
 ## 🌟 FEATURES
 - High-Efficiency Captures: Utilizes DXGI Desktop Duplication API for high framerate recordings.
