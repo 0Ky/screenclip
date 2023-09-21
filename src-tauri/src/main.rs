@@ -22,6 +22,7 @@ use screenshots::Screen;
 use video_rs::{Encoder, EncoderSettings, Locator, Options, RawFrame, Time};
 use ffmpeg_next::{codec, encoder, format, log, media, Rational, Rescale, util::mathematics::rescale::TIME_BASE};
 use anyhow::Result;
+use ndarray::Array3;
 
 fn aligned_with_rational(original: &Time, time_base: Rational) -> Time {
     let (original_time, original_time_base) = original.clone().into_parts();
@@ -34,28 +35,35 @@ fn aligned_with_rational(original: &Time, time_base: Rational) -> Time {
 fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, height: u32, fps: u32) -> Result<()> {
     video_rs::init().expect("Could not init video.");
     fs::create_dir_all(output_directory)?;
-    let options = Options::new_with_fragmented_mov();
-    let encoder_time_base = TIME_BASE;
-    let duration: Time = Time::from_nth_of_a_second(fps as usize);
-    let mut position = Time::zero();
-    let settings = EncoderSettings::for_h264_yuv420p(width as usize, height as usize, true);
     let mut destination = PathBuf::from(output_directory);
-    
     destination.push(&format!("video-new.mp4"));
     let destination: Locator = destination.into();
-    let mut encoder = Encoder::new_with_format_and_options(&destination, settings, "mp4", &options)?;
+    let settings = EncoderSettings::for_h264_yuv420p(width as usize, height as usize, false);
+    let mut encoder = Encoder::new(&destination, settings).expect("failed to create encoder");
+    let duration: Time = Time::from_nth_of_a_second(fps as usize);
+    let mut position = Time::zero();
 
-    for (index, frame_data)  in frames.iter().enumerate() {
-        let mut raw_frame = RawFrame::new(ffmpeg_next::util::format::pixel::Pixel::BGRA, width as u32, height as u32);
-        let frame_data_mut = raw_frame.data_mut(0);
-        frame_data_mut.copy_from_slice(&frame_data);
-        raw_frame.set_pts(aligned_with_rational(&position, encoder_time_base).into_value());
-        encoder.encode_raw(raw_frame)?;
+    for (index, frame_data) in frames.iter().enumerate() {
+        let rgb_data = bgra_to_rgb(&frame_data);
+        let shape = (height as usize, width as usize, 3);
+        let frame_array = Array3::from_shape_vec(shape, rgb_data).expect("Failed to convert Vec<u8> to Array3<u8>");
+        encoder.encode(&frame_array, &position)?;
         position = position.aligned_with(&duration).add();
     }
-    encoder.finish()?;
 
+    encoder.finish()?;
+    
     Ok(())
+}
+
+fn bgra_to_rgb(frame_data: &Vec<u8>) -> Vec<u8> {
+    let mut rgb_data = Vec::with_capacity((frame_data.len() / 4) * 3);
+    for pixels in frame_data.chunks(4) {
+        rgb_data.push(pixels[2]);
+        rgb_data.push(pixels[1]); 
+        rgb_data.push(pixels[0]); 
+    }
+    rgb_data
 }
 
 async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width: u32, height: u32, fps: u32) -> Result<Vec<Vec<u8>>> {

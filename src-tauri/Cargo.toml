@@ -21,9 +21,10 @@ tokio = { version = "1.28.2", features = ["full"] }
 screenshots = "0.6.0"
 base64 = "0.21.2"
 display-info = "0.4.2"
-video-rs = { git = "https://github.com/oddity-ai/video-rs.git" }
+video-rs = { git = "https://github.com/oddity-ai/video-rs.git", features = ["ndarray"] }
 ffmpeg-next = { version = "6.0", features = ["format", "codec", "software-resampling", "software-scaling"] }
 anyhow = "1.0.75"
+ndarray = { version = "0.15" }
 
 [dependencies.windows]
 version = "0.39.0"
