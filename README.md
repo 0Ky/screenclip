@@ -43,6 +43,6 @@ Use this software or tool entirely at your own discretion and risk. Running or i
 
 * An unplanned migration of your data to the digital Bermuda Triangle. And, while we're pushing the envelope, spontaneous combustion.
 
-If you continue using this tool, it means you're brave, perhaps a tad adventurous, and that you fully embrace the digital rodeo ahead. Remember: Always back up your data, wear a virtual helmet, and a box of tissues handy. They'll be useful for wiping away tears, be it from laughter or the occasional cry over the code's... uniqueness.
+If you continue using this tool, it means you're brave, perhaps a tad adventurous, and that you fully embrace the digital rodeo ahead. Remember: Always back up your data, wear a virtual helmet, and keep a box of tissues handy. They'll be useful for wiping away tears, be it from laughter or the occasional cry over the code's... uniqueness.
 
 May the tech odds be ever in your favor, knight of the binary realm!
