@@ -27,9 +27,7 @@
           <div class="navbar-bg"></div>
           <div class="navbar-inner sliding">
             <div class="title">Settings</div>
-            <div class="title-large">
-              <div class="title-large-text text-align-center">Settings</div>
-            </div>
+            
           </div>
         </div>
 
@@ -52,6 +50,7 @@
         <div class="tabs-animated-wrap">
           <div class="tabs">
             <div class="page-content tab tab-active" id="vid">
+
               <div class="block block-strong inset custom-backdrop">
                 <div class="block-title-medium padding-left">FPS</div>
                 <div class="list">
@@ -90,6 +89,22 @@
                           <div class="range-slider range-slider-init" data-min="0" data-max="51" data-step="1"
                             data-label="true" data-value="20" data-scale="true" data-scale-steps="3"
                             data-scale-sub-steps="5"></div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="block block-strong inset custom-backdrop">
+                <div class="block-title-medium padding-left">Output Path</div>
+                <div class="list">
+                  <ul>
+                    <li class="item-content item-input item-input-outline">
+                      <div class="item-inner">
+                        <div class="item-title item-floating-label"></div>
+                        <div class="item-input-wrap">
+                          <input id="outputPath" type="text" onclick="selectPath(this)" style="cursor: pointer;" readonly />
                         </div>
                       </div>
                     </li>

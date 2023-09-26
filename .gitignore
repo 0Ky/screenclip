@@ -68,3 +68,4 @@ target
 
 /crates/*
 !/crates/win_desktop_duplication/
+!/crates/video-rs/

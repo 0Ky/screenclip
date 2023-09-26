@@ -3,7 +3,8 @@
 
 use tauri::{
         AppHandle, Manager, CustomMenuItem, SystemTray, SystemTrayEvent, RunEvent, 
-        SystemTrayMenu, SystemTrayMenuItem, SystemTraySubmenu, Window, GlobalShortcutManager
+        SystemTrayMenu, SystemTrayMenuItem, SystemTraySubmenu, Window, GlobalShortcutManager,
+        PhysicalPosition
 };
 use tauri_plugin_positioner::{WindowExt, Position};
 use window_shadows::set_shadow;
@@ -20,19 +21,11 @@ use win_desktop_duplication::{tex_reader::*, devices::*};
 use display_info::DisplayInfo;
 use screenshots::Screen;
 use video_rs::{Encoder, EncoderSettings, Locator, Options, RawFrame, Time};
-use ffmpeg_next::{codec, encoder, format, log, media, Rational, Rescale, util::mathematics::rescale::TIME_BASE};
 use anyhow::Result;
 use ndarray::Array3;
 
-fn aligned_with_rational(original: &Time, time_base: Rational) -> Time {
-    let (original_time, original_time_base) = original.clone().into_parts();
-    Time::new(
-        original_time.map(|time| time.rescale(original_time_base, time_base)),
-        time_base,
-    )
-}
-
 fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, height: u32, fps: u32) -> Result<()> {
+    println!("Encoding...");
     video_rs::init().expect("Could not init video.");
     fs::create_dir_all(output_directory)?;
     let mut destination = PathBuf::from(output_directory);
@@ -43,27 +36,15 @@ fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, heigh
     let duration: Time = Time::from_nth_of_a_second(fps as usize);
     let mut position = Time::zero();
 
-    for (index, frame_data) in frames.iter().enumerate() {
-        let rgb_data = bgra_to_rgb(&frame_data);
-        let shape = (height as usize, width as usize, 3);
-        let frame_array = Array3::from_shape_vec(shape, rgb_data).expect("Failed to convert Vec<u8> to Array3<u8>");
+    for frame_data in frames {
+        let shape = (height as usize, width as usize, 4);
+        let frame_array = Array3::from_shape_vec(shape, frame_data).expect("Failed to convert Vec<u8> to Array3<u8>");
         encoder.encode(&frame_array, &position)?;
         position = position.aligned_with(&duration).add();
     }
-
-    encoder.finish()?;
     
+    encoder.finish()?;
     Ok(())
-}
-
-fn bgra_to_rgb(frame_data: &Vec<u8>) -> Vec<u8> {
-    let mut rgb_data = Vec::with_capacity((frame_data.len() / 4) * 3);
-    for pixels in frame_data.chunks(4) {
-        rgb_data.push(pixels[2]);
-        rgb_data.push(pixels[1]); 
-        rgb_data.push(pixels[0]); 
-    }
-    rgb_data
 }
 
 async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width: u32, height: u32, fps: u32) -> Result<Vec<Vec<u8>>> {
@@ -87,6 +68,8 @@ async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width:
 }
 
 async fn capture_video(x: u32, y: u32, width: u32, height: u32, app: &AppHandle) {
+    let width = if width % 2 != 0 { width - 1 } else { width };
+    let height = if height % 2 != 0 { height - 1 } else { height };
     set_process_dpi_awareness();
     co_init();
     let adapter = AdapterFactory::new().get_adapter_by_idx(0).unwrap();
@@ -188,7 +171,16 @@ fn tray_events(app: &AppHandle, event: SystemTrayEvent) {
             match id.as_str() {
                 "open-settings" => {
                     let window = app.get_window("main").unwrap();
+
                     let _ = window.move_window(Position::TrayCenter);
+                    let current_position = window.outer_position().unwrap();
+                    let offset_position = PhysicalPosition {
+                        x: current_position.x - 18,
+                        y: current_position.y - 12,
+                    };
+                    let _ = window.set_position(tauri::Position::Physical(offset_position));
+                    // let _ = window.move_window(Position::TrayCenter);
+
                     #[cfg(any(windows, target_os = "windows"))]
                     set_shadow(&window, true).unwrap();
                     window.show();

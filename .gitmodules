@@ -1,3 +1,6 @@
 [submodule "crates/win_desktop_duplication"]
 	path = crates/win_desktop_duplication
 	url = https://github.com/0Ky/win_desktop_duplication.git
+[submodule "crates/video-rs"]
+	path = crates/video-rs
+	url = https://github.com/0Ky/video-rs.git
