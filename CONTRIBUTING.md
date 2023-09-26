@@ -32,9 +32,11 @@ Whether you're a veteran developer or a newcomer, we appreciate all contribution
 
 ## Code of Conduct
 
+By participating and contributing to this project, you agree to uphold our [Code of Conduct](https://github.com/0Ky/screenclip/blob/main/CODE_OF_CONDUCT.md).
+
 ## Build Instructions
 
-*Follow the build instructions from the [dev](https://github.com/0Ky/screenclip/tree/dev#-build-instructions) branch to get started.*
+*\* Follow the build instructions from the [dev](https://github.com/0Ky/screenclip/tree/dev#-build-instructions) branch to get started. \**
 
 ---
 
