@@ -9,7 +9,7 @@ A lightweight system tray application built with the Tauri framework, utilizing 
 
 ## 🛠️ TO-DO
 
-*\* The [TO-DO](https://github.com/0Ky/screenclip/blob/main/TO-DO.md) list can be found in the main branch \**
+*\* The [TO-DO](https://github.com/0Ky/screenclip/blob/dev/TO-DO.md) list can be found in the main branch \**
 
 ## 👷 BUILD INSTRUCTIONS
 ### Using MSYS2 environment on Windows
