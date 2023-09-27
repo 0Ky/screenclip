@@ -6,7 +6,7 @@ Whether you're a veteran developer or a newcomer, we appreciate all contribution
 
 1. Begin by forking the `dev` branch of the `screenclip` repository. If you've previously forked it, make sure your fork is synchronized and updated with the latest changes.
 
-2. In your fork, create and switch to a new branch named `<branch_name>`. This is where you'll make your changes.
+2. In your fork, create and switch to a new branch. Begin the branch name with a category like `feature` or `bugfix`, followed by a descriptive name. This is where you'll make your changes.
 
 3. Carefully implement the changes or enhancements you have in mind on this branch. Remember to frequently commit to keep a record of your progress.
 
