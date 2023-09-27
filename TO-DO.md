@@ -18,7 +18,7 @@
 
 6. [ ] Optimize frame encoding for performance (minimize unnecessary operations).
 
-7. [ ] Implement control of encoder settings from front-end (CRF, Bitrate, Preset, Tune, Profile, and enable Fast Start for playback).
+7. [ ] Implement backend integration to control encoder settings from front-end (CRF, Bitrate, Preset, Tune, Profile, and enable Fast Start for playback).
 
 8. [ ] Implement audio capture.
 
@@ -41,3 +41,5 @@
 17. [ ] Implement an option to send image capture to Excalidraw before cropping for sketching.
 
 18. [ ] Show height and width of selected area.
+
+19. [ ] Implement backend integration to process and store the selected output path from the frontend file/directory picker dialog.
