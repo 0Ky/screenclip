@@ -28,7 +28,7 @@ Whether you're a veteran developer or a newcomer, we appreciate all contribution
 
 1. **Ensure Your Feature is Unique**: It's essential to scan the codebase before adding a feature to make sure it doesn't already exist.
    
-2. **Look for Similar Pull Requests**: Before submitting a new pull request, browse through the existing ones. This avoids duplicate efforts where multiple contributors work on the same feature or fix.
+2. **Look for Similar Pull Requests**: Before submitting a new pull request, browse through the existing ones or open an issue (or update an existing one) containing something you wish to contribute. This avoids duplicate efforts where multiple contributors work on the same feature or fix. 
 
 ## Code of Conduct
 
