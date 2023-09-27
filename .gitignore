@@ -10,17 +10,24 @@ lerna-debug.log*
 dist
 dist-ssr
 *.local
-Cargo.lock
+/.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
 
 # Editor directories and files
 .vscode/*
 .idea
 .DS_Store
+.history
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.code-workspace
 
 # Dependency directories
 node_modules/
@@ -56,7 +63,11 @@ proptest-regressions/
 TODO.md
 
 # rust compiled folders
-target
+target/
+debug/
+Cargo.lock
+**/*.rs.bk
+*.pdb
 
 # lock for libs
 /yarn.lock
@@ -69,3 +80,28 @@ target
 /crates/*
 !/crates/win_desktop_duplication/
 !/crates/video-rs/
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
