@@ -38,8 +38,12 @@
 
 16. [ ] Support hardware encoding NVEnc and AMF (Nvidia/AMD GPU encoding).
 
-17. [ ] Implement an option to send image capture to Excalidraw before cropping for sketching.
+17. [ ] Handle errors properly (eg. hotkey register conflict)
 
-18. [ ] Show height and width of selected area.
+18. [ ] Implement an option to send image capture to Excalidraw before cropping for sketching.
 
-19. [ ] Implement backend integration to process and store the selected output path from the frontend file/directory picker dialog.
+19. [ ] Show height and width of selected area.
+
+20. [ ] Implement backend integration to process and store the selected output path from the frontend file/directory picker dialog.
+
+21. [ ] Refactor thread spawning, ensuring complete async integration, addressing synchronization, errors, blocking, concurrency, and back-pressure.
