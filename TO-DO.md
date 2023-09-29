@@ -47,3 +47,9 @@
 27. [ ] Streamline styles and UI components for consistency across all pages/modules.
 28. [ ] Introduce new input fields as necessary, ensuring they're intuitive and user-friendly. Coordinate with backend for integration, and if corresponding functionality doesn't exist, implement it.
 29. [ ] Implement interactive tooltips or helper guides for new input fields to assist users.
+
+### **Documentation:**
+
+30. [ ] Add inline comments throughout the codebase to clarify function, method purposes, highlighting any complexities or nuances.
+31. [ ] Create a developer's guide detailing the architecture, data flow, and best practices for extending or modifying the application.
+32. [ ] Draft a comprehensive user manual or FAQ for the application, covering installation, basic usage, troubleshooting, and advanced features.
