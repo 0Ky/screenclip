@@ -33,10 +33,8 @@
 19. [ ] Optimize screen capture via DXGI Desktop Duplication API for performance (minimize frame skip).
 20. [ ] Optimize frame encoding for performance (minimize unnecessary operations).
 
-### **Chore:**
-21. [ ] Unspaghettify codebase (code refactoring).
-
 ### **Refactor:**
+21. [ ] Unspaghettify codebase (code refactoring).
 22. [ ] Refactor thread spawning, ensuring complete async integration, addressing synchronization, errors, blocking, concurrency, and back-pressure.
 
 ### **Style:**
