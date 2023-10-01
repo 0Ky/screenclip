@@ -20,9 +20,11 @@ use win_desktop_duplication::*;
 use win_desktop_duplication::{tex_reader::*, devices::*};
 use display_info::DisplayInfo;
 use screenshots::Screen;
-use video_rs::{Encoder, EncoderSettings, Locator, Options, RawFrame, Time};
+use video_rs::{Encoder, EncoderSettings, Locator, Options, AvPixel, RawFrame, Time};
 use anyhow::Result;
 use ndarray::Array3;
+use std::collections::HashMap;
+
 
 fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, height: u32, fps: u32) -> Result<()> {
     println!("Encoding...");
@@ -31,7 +33,11 @@ fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, heigh
     let mut destination = PathBuf::from(output_directory);
     destination.push(&format!("video-new.mp4"));
     let destination: Locator = destination.into();
-    let settings = EncoderSettings::for_h264_yuv420p(width as usize, height as usize, false);
+    let mut custom_opts = HashMap::new();
+    custom_opts.insert("preset".to_string(), "veryfast".to_string());
+    custom_opts.insert("crf".to_string(), "22".to_string());
+    let encoder_options: Options = Options::new_from_hashmap(&custom_opts);
+    let settings = EncoderSettings::for_h264_custom(width as usize, height as usize, AvPixel::YUV420P, encoder_options);
     let mut encoder = Encoder::new(&destination, settings).expect("failed to create encoder");
     let duration: Time = Time::from_nth_of_a_second(fps as usize);
     let mut position = Time::zero();
@@ -42,7 +48,7 @@ fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, heigh
         encoder.encode(&frame_array, &position)?;
         position = position.aligned_with(&duration).add();
     }
-    
+
     encoder.finish()?;
     Ok(())
 }
