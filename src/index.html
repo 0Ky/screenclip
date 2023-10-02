@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="/framework7-bundle.min.css">
   <link rel="stylesheet" href="/framework7-icons.css" />
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 
 <body>
@@ -27,7 +26,7 @@
           <div class="navbar-bg"></div>
           <div class="navbar-inner sliding">
             <div class="title">Settings</div>
-            
+
           </div>
         </div>
 
@@ -59,24 +58,13 @@
                       <div class="item-inner">
                         <div class="item-title item-floating-label"></div>
                         <div class="item-input-wrap">
-                          <input id="fps" type="number" name="name" min="15" max="120" oninput="if (isNaN(this.valueAsNumber)) {
-                                this.value = min;
-                                return;
-                              }
-                              if (parseInt(this.value) > max) {
-                                this.value = max;
-                              }" onchange="
-                              console.dir('onchange');
-                              if (parseInt(this.value) < min) {
-                                this.value = min;
-                              }" />
+                          <input id="fps" type="number" name="name" min="15" max="120"/>
                         </div>
                       </div>
                     </li>
                   </ul>
                 </div>
               </div>
-
 
               <div class="block block-strong inset custom-backdrop">
                 <div class="block-title-medium padding-left">CRF</div>
@@ -104,7 +92,7 @@
                       <div class="item-inner">
                         <div class="item-title item-floating-label"></div>
                         <div class="item-input-wrap">
-                          <input id="outputPath" type="text" onclick="selectPath(this)" style="cursor: pointer;" readonly />
+                          <input id="outputPath" type="text" style="cursor: pointer;" readonly />
                         </div>
                       </div>
                     </li>
@@ -164,14 +152,9 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
-    <!-- Path to Framework7 Library Bundle JS-->
-    <script type="text/javascript" src="/framework7-bundle.min.js"></script>
     <!-- Path to your app js-->
-    <script type="text/javascript" src="/main.js"></script>
-
+    <script type="module" src="/main.js" defer></script>
 </body>
-
 </html>

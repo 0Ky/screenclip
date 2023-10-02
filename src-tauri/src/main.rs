@@ -24,6 +24,8 @@ use video_rs::{Encoder, EncoderSettings, Locator, Options, AvPixel, RawFrame, Ti
 use anyhow::Result;
 use ndarray::Array3;
 use std::collections::HashMap;
+use tauri_plugin_store::StoreBuilder;
+use serde_json::json;
 
 
 fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, height: u32, fps: u32) -> Result<()> {
@@ -265,6 +267,7 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![video_capture])
+        .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_positioner::init())
         .system_tray(tray)
         .on_system_tray_event(tray_events)

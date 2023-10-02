@@ -2,8 +2,10 @@ const { invoke } = window.__TAURI__.tauri;
 const { listen } = window.__TAURI__.event;
 const { open } = window.__TAURI__.dialog;
 const { appDir } = window.__TAURI__.path;
+import { Store } from "tauri-plugin-store-api";
+import Framework7 from 'framework7/bundle';
 
-var app = new Framework7({
+const app = new Framework7({
     darkMode: 'auto',
     theme: 'ios',
     // App root element
@@ -12,7 +14,7 @@ var app = new Framework7({
     name: 'Screenclip',
     // Enable swipe panel
     panel: {
-      swipe: true,  
+      swipe: true,
     },
     colors: {
         bg: '#ff0000'
@@ -27,10 +29,15 @@ var app = new Framework7({
     // ... other parameters
 });
 
-var mainView = app.views.create('.view-main');
+const mainView = app.views.create('.view-main');
 
+const fpsEl = document.querySelector('#fps');
+const outputEl = document.querySelector('#outputPath');
+const fpsMin = 15;
+const fpsMax = 120;
 
-async function selectPath(path) {
+outputEl.addEventListener('click', async function(event) {
+  const inputEl = event.target;
   const selected = await open({
     directory: true,
     multiple: false,
@@ -42,12 +49,23 @@ async function selectPath(path) {
     // user cancelled the selection
   } else {
     // user selected a single directory
-    path.value = selected;
+    inputEl.value = selected;
   }
-}
+});
 
+fpsEl.addEventListener('input', function() {
+    if (isNaN(this.valueAsNumber)) {
+        this.value = fpsMin;
+        return;
+    }
+    if (parseInt(this.value) > fpsMax) {
+        this.value = fpsMax;
+    }
+});
 
-// window.addEventListener("DOMContentLoaded", () => {
-
- 
-// });
+fpsEl.addEventListener('change', function() {
+    console.dir('onchange');
+    if (parseInt(this.value) < fpsMin) {
+        this.value = fpsMin;
+    }
+});
