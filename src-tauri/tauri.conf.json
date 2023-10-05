@@ -34,12 +34,9 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [
-        "avcodec-60.dll",
-        "avdevice-60.dll",
-        "avfilter-9.dll",
-        "avformat-60.dll"
-      ]
+      "resources": {
+        "libs": "./"
+      }
     },
     "security": {
       "csp": null

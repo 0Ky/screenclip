@@ -10,12 +10,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.4", features = [] }
+tauri-build = { version = "1.5.0", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4", features = [ "shell-open", "system-tray", "devtools"] }
+tauri = { version = "1.5.1", features = [ "shell-open", "system-tray", "devtools"] }
 window-shadows = "0.2.1"
 tauri-plugin-positioner = { version = "1.0.4", features = ["system-tray"] }
 win_desktop_duplication =  { path = "../crates/win_desktop_duplication" }
