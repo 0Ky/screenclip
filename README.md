@@ -21,7 +21,7 @@ A lightweight system tray application built with the Tauri framework, utilizing 
 2. Install Tauri [prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) (C++ Build Tools, WebView2 and Rust).
 3. Clone this repo: `git clone -b dev --recurse-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
 4. Follow the FFmpeg [build instructions](https://github.com/zmwangx/rust-ffmpeg/wiki/Notes-on-building#msvc-toolchain) for the **MSVC toolchain**.
-   - Instead of creating a new `FFMPEG_DIR` environment variable copy the following DLLs `avcodec-60.dll`,`avdevice-60`,`avfilter-9.dll` and `avformat-60.dll` to `screenclip\src-tauri`.
+   - Copy the following DLLs `avcodec-60.dll`,`avdevice-60`,`avfilter-9.dll` and `avformat-60.dll` to `screenclip\src-tauri`.
 5. Once you're in the cloned folder run `npm install`, then `npm run tauri dev` to run in development mode or `npm run tauri build` to build in release mode.
 
 ### Building with GNU Toolchain on MSYS2 for Windows
