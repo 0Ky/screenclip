@@ -33,6 +33,12 @@
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
+      ],
+      "resources": [
+        "avcodec-60.dll",
+        "avdevice-60.dll",
+        "avfilter-9.dll",
+        "avformat-60.dll"
       ]
     },
     "security": {

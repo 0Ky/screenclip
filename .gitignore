@@ -105,3 +105,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Shared objects (Windows DLLs)
+*.dll
