@@ -16,17 +16,28 @@ A lightweight system tray application built with the Tauri framework, utilizing 
 *\* The [TO-DO](https://github.com/0Ky/screenclip/blob/dev/TO-DO.md) list can be found in the main branch \**
 
 ## 👷 BUILD INSTRUCTIONS
-### Using MSYS2 environment on Windows
+### Building with MSVC on Windows
+1. Install [NodeJS](https://nodejs.org/en/download).
+2. Install Tauri [prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) (C++ Build Tools, WebView2 and Rust).
+3. Clone this repo: `git clone -b dev --recurse-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
+4. Follow the FFmpeg [build instructions](https://github.com/zmwangx/rust-ffmpeg/wiki/Notes-on-building#msvc-toolchain) for the **MSVC toolchain**.
+   - Instead of creating a new `FFMPEG_DIR` environment variable copy the following DLLs `avcodec-60.dll`,`avdevice-60`,`avfilter-9.dll` and `avformat-60.dll` to `screenclip\src-tauri`.
+5. Once you're in the cloned folder run `npm install`, then `npm run tauri dev` to run in development mode or `npm run tauri build` to build in release mode.
+
+### Building with GNU Toolchain on MSYS2 for Windows
 1. Install [NodeJS](https://nodejs.org/en/download).
 2. Install Tauri [prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) (C++ Build Tools, WebView2 and Rust).
 3. Install [MSYS2 MinGW64](https://www.msys2.org/#installation).
 4. Update all packages in MinGW64, run `pacman -Syu` a couple of times.
-4. In MinGW64 install [Git](https://www.msys2.org/docs/git/) `pacman -S git`.
-5. In MinGW64 install Rust compiler `pacman -S mingw-w64-x86_64-rust`.
-4. Follow FFmpeg [build instructions](https://github.com/zmwangx/rust-ffmpeg/wiki/Notes-on-building#gnu-toolchain) for the GNU toolchain.
-5. Add `export PATH="/c/Program Files/nodejs/:$PATH"` to the end of `.bashrc` file in your home directory of MinGW64.
-6. Clone this repo: `git clone -b dev --recurse-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
-7. Once you're in the cloned folder run `npm install`, then `npm run tauri dev` to run in development mode or `npm run tauri build` to build in release mode.
+5. In MinGW64 install [Git](https://www.msys2.org/docs/git/) `pacman -S git`.
+6. In MinGW64 install Rust compiler `pacman -S mingw-w64-x86_64-rust`.
+7. Clone this repo: `git clone -b dev --recurse-submodules https://github.com/0Ky/screenclip.git` (must use dev branch and include submodules).
+8. Follow FFmpeg [build instructions](https://github.com/zmwangx/rust-ffmpeg/wiki/Notes-on-building#gnu-toolchain) for the **GNU toolchain**.
+   - Copy the following DLLs `avcodec-60.dll`,`avdevice-60`,`avfilter-9.dll` and `avformat-60.dll` to `screenclip\src-tauri`.
+9. Add `export PATH="/c/Program Files/nodejs/:$PATH"` to the end of `.bashrc` file in your home directory of MinGW64.
+10. Once you're in the cloned folder run `npm install`, then `npm run tauri dev` to run in development mode or `npm run tauri build` to build in release mode.
+
+
 
 ## ⚠️ WARNING DISCLAIMER
 
