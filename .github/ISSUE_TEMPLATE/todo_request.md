@@ -1,8 +1,7 @@
----
 name: Work Announcement
 description: Announce what you are planning to work on to avoid duplicate efforts.
 labels: ["📢 work announcement"]
-assignees:
+assignees: ''
 body:
   - type: markdown
     attributes:
@@ -48,4 +47,3 @@ body:
     attributes:
       label: Any additional notes or comments?
       placeholder: "For instance, any help, information or resources you might need..."
----
