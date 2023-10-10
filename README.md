@@ -2,7 +2,8 @@
 
 [![Visitors Count](https://img.shields.io/endpoint?url=https://hits.dwyl.com/0ky/screenclip.json?color=green&label=visitors)](#)
 [![Contributors Count](https://img.shields.io/github/contributors/0ky/screenclip?color=green)](#)
-[![GitHub issues](https://img.shields.io/github/issues/0ky/screenclip?color=green)](#)
+![GitHub Hacktoberfest combined status (suggestion label override)](https://img.shields.io/github/hacktoberfest/2023/0ky/screenclip)
+<!-- [![GitHub issues](https://img.shields.io/github/issues/0ky/screenclip?color=green)](#) -->
 
 A lightweight system tray application built with the Tauri framework, utilizing Rust for backend operations and Vanilla JS for the frontend. The application leverages the DXGI Desktop Duplication API to provide low-latency, direct access to desktop frames, allowing users to video record selected areas of their screen similar to the snipping tool.
 
