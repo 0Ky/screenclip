@@ -39,7 +39,7 @@
 
 ### **Style:**
 23. [ ] Improve the frontend UI design (HTML/JS/CSS)
-24. [ ] Update the color scheme to support both light and dark modes, aligning with OS preferences and enhancing readability and contrast.
+24. [X] Update the color scheme to support both light and dark modes, aligning with OS preferences and enhancing readability and contrast.
 25. [ ] Redesign the navigation bar for a more intuitive user experience, emphasizing key features.
 26. [ ] Reorganize the overall layout to prioritize user flow and ease of access to main features.
 27. [ ] Streamline styles and UI components for consistency across all pages/modules.
