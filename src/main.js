@@ -5,6 +5,9 @@ const { appDir } = window.__TAURI__.path;
 import { Store } from "tauri-plugin-store-api";
 import Framework7 from 'framework7/bundle';
 
+console.log("--MAIN.JS RUN");
+
+
 const app = new Framework7({
     darkMode: 'auto',
     theme: 'ios',
@@ -32,9 +35,28 @@ const app = new Framework7({
 const mainView = app.views.create('.view-main');
 
 const fpsEl = document.querySelector('#fps');
+const crfEl = document.querySelector('#crf');
 const outputEl = document.querySelector('#outputPath');
 const fpsMin = 15;
 const fpsMax = 120;
+
+const store = new Store("settings.json");
+
+const fpsStore = await store.get("fps");
+const crfStore = await store.get("crf");
+const outputStore = await store.get("output");
+
+// load settings
+console.log("Load FPS:", fpsStore);
+fpsEl.valueAsNumber = fpsStore;
+
+console.log("Load CRF:", crfStore);
+app.range.setValue(crfEl, crfStore);
+
+console.log("Load output:", outputStore);
+outputEl.value = outputStore;
+
+
 
 outputEl.addEventListener('click', async function(event) {
   const inputEl = event.target;
@@ -50,22 +72,38 @@ outputEl.addEventListener('click', async function(event) {
   } else {
     // user selected a single directory
     inputEl.value = selected;
+    console.log(typeof inputEl.value);
+    await store.set("output", selected);
+    await store.save();
   }
 });
 
 fpsEl.addEventListener('input', function() {
-    if (isNaN(this.valueAsNumber)) {
-        this.value = fpsMin;
-        return;
-    }
-    if (parseInt(this.value) > fpsMax) {
-        this.value = fpsMax;
-    }
+  console.dir('fps:input');
+  if (isNaN(this.valueAsNumber)) {
+      this.value = fpsMin;
+      return;
+  }
+  if (parseInt(this.value) > fpsMax) {
+      this.value = fpsMax;
+  }
 });
 
-fpsEl.addEventListener('change', function() {
-    console.dir('onchange');
-    if (parseInt(this.value) < fpsMin) {
-        this.value = fpsMin;
-    }
+fpsEl.addEventListener('change', async function() {
+  console.dir('fps:change');
+  if (parseInt(this.value) < fpsMin) {
+      this.value = fpsMin;
+  }
+  console.log("fps:",this.valueAsNumber);
+
+  await store.set("fps", this.valueAsNumber);
+  await store.save();
+});
+
+crfEl.addEventListener('range:change', async function() {
+  const crf = app.range.getValue(this);
+  console.log("crf:", crf);
+
+  await store.set("crf", crf);
+  await store.save();
 });

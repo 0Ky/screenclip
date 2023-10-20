@@ -25,10 +25,9 @@ use anyhow::Result;
 use ndarray::Array3;
 use std::collections::HashMap;
 use tauri_plugin_store::StoreBuilder;
-use serde_json::json;
+use tauri_plugin_log::{LogTarget};
 
-
-fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, height: u32, fps: u32) -> Result<()> {
+fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, height: u32, fps_store: u32, crf_store: u32) -> Result<()> {
     println!("Encoding...");
     video_rs::init().expect("Could not init video.");
     fs::create_dir_all(output_directory)?;
@@ -37,11 +36,11 @@ fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, heigh
     let destination: Locator = destination.into();
     let mut custom_opts = HashMap::new();
     custom_opts.insert("preset".to_string(), "veryfast".to_string());
-    custom_opts.insert("crf".to_string(), "22".to_string());
+    custom_opts.insert("crf".to_string(), crf_store.to_string());
     let encoder_options: Options = Options::new_from_hashmap(&custom_opts);
     let settings = EncoderSettings::for_h264_custom(width as usize, height as usize, PixelFormat::YUV420P, encoder_options);
     let mut encoder = Encoder::new(&destination, settings).expect("failed to create encoder");
-    let duration: Time = Time::from_nth_of_a_second(fps as usize);
+    let duration: Time = Time::from_nth_of_a_second(fps_store as usize);
     let mut position = Time::zero();
 
     for frame_data in frames {
@@ -75,7 +74,7 @@ async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width:
     Ok(frames)
 }
 
-async fn capture_video(x: u32, y: u32, width: u32, height: u32, app: &AppHandle) {
+async fn capture_video(x: u32, y: u32, width: u32, height: u32, fps_store: u32, crf_store: u32, output_store: &str, app: &AppHandle) {
     let width = if width % 2 != 0 { width - 1 } else { width };
     let height = if height % 2 != 0 { height - 1 } else { height };
     set_process_dpi_awareness();
@@ -84,10 +83,9 @@ async fn capture_video(x: u32, y: u32, width: u32, height: u32, app: &AppHandle)
     let output = adapter.get_display_by_idx(0).unwrap();
     let display_mode = output.get_current_display_mode().unwrap();
     let mut dupl = DesktopDuplicationApi::new(adapter, output).unwrap();
-    let desired_fps = 60;
-    match capture_frames(&mut dupl, x, y, width, height, desired_fps).await {
+    match capture_frames(&mut dupl, x, y, width, height, fps_store).await {
         Ok(frames) => {
-            match encode_frames("../output", frames, width, height, desired_fps) {
+            match encode_frames(output_store, frames, width, height, fps_store, crf_store) {
                 Ok(()) => {
                     println!("Video capture and encoding successful.");
                     let window = app.get_window("regionselectWindow").unwrap();
@@ -101,10 +99,13 @@ async fn capture_video(x: u32, y: u32, width: u32, height: u32, app: &AppHandle)
 }
 
 #[tauri::command]
-fn video_capture(x: u32, y: u32, width: u32, height: u32, app_handle: tauri::AppHandle) {
-    println!("X {}, Y {}, WIDTH {}, HEIGHT {}", x,y,width,height);
+fn video_capture(x: u32, y: u32, width: u32, height: u32, fps: u32, crf: u32, output: &str, app_handle: tauri::AppHandle) {
+    let output_store_cloned = output.to_string();
+
+    println!("X {}, Y {}, WIDTH {}, HEIGHT {}, FPS {}, CRF {}, OUTPUT PATH {}", x,y,width,height,fps,crf,&output_store_cloned);
+
     tauri::async_runtime::spawn(async move {
-        capture_video(x,y,width,height,&app_handle).await;
+        capture_video(x, y, width, height, fps, crf, &output_store_cloned, &app_handle).await;
     });
 }
 
@@ -229,6 +230,26 @@ fn main() {
 
     tauri::Builder::default()
         .setup(|app| {
+
+            let default_settings = HashMap::from([
+                ("fps".to_string(), 60.into()),
+                ("crf".to_string(), 18.into()),
+                ("output".to_string(), "../output".into()),
+            ]);
+            let settings = StoreBuilder::new(app.handle(), "settings.json".parse()?)
+            .defaults(default_settings)
+            .build();
+
+            let app_handle = app.handle();
+
+            std::thread::spawn(move || {
+                app_handle.plugin(tauri_plugin_store::Builder::default()
+                    .stores([settings])
+                    .freeze()
+                    .build(),
+                )
+            });
+
             let region_select_window = tauri::WindowBuilder::new(
                 app,
                 "regionselectWindow",
@@ -267,7 +288,11 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![video_capture])
-        .plugin(tauri_plugin_store::Builder::default().build())
+        // .plugin(tauri_plugin_log::Builder::default().targets([
+        //     LogTarget::LogDir,
+        //     LogTarget::Stdout,
+        //     LogTarget::Webview,
+        // ]).build())
         .plugin(tauri_plugin_positioner::init())
         .system_tray(tray)
         .on_system_tray_event(tray_events)

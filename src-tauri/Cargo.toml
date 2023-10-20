@@ -27,7 +27,8 @@ video-rs =  { path = "../crates/video-rs", features = ["ndarray"] }
 # video-rs = { git = "https://github.com/oddity-ai/video-rs.git", features = ["ndarray"] }
 # ffmpeg-next = { version = "6.0.0", features = ["codec", "filter", "format", "software-resampling", "software-scaling"] }
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-
+tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }   
+log = "^0.4"
 anyhow = "1.0.75"
 ndarray = { version = "0.15" }
 
