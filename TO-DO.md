@@ -12,7 +12,7 @@
 2. [ ] While recording remove the crosshair at the center.
 3. [ ] Handle errors properly (eg. hotkey register conflict)
 4. [ ] For video capture force height and width region selection area to snap to even numbers (because YUV420 pixel format does not offer precise dimensions).
-5. [ ] Implement default values for input fields in the settings, ensuring a seamless user experience for first-time users.
+5. [X] Implement default values for input fields in the settings, ensuring a seamless user experience for first-time users.
 
 ### **Feature:**
 6. [X] Encode raw frames into H264 data.
