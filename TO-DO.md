@@ -18,7 +18,7 @@
 6. [X] Encode raw frames into H264 data.
 7. [X] Mux the H264 data to mp4.
 8. [ ] Implement audio capture.
-9. [ ] Implement persistent settings (utilize [tauri-plugin-store](https://github.com/tauri-apps/tauri-plugin-store) for persistent key value storage).
+9. [X] Implement persistent settings (utilize [tauri-plugin-store](https://github.com/tauri-apps/tauri-plugin-store) for persistent key value storage).
 10. [ ] Implement customizable hotkeys (video capture Start/Stop, screenshot and quickshot).
 11. [ ] Implement a recording controls that's always below the region selection area that provides the option to mute/unmute audio, button to select the entire screen and a record button.
 12. [ ] Implement a recording widget that shows elapsed time and a button to stop recording (escape hotkey should also stop recording by default) 
@@ -26,8 +26,8 @@
 14. [ ] Support hardware encoding NVEnc and AMF (Nvidia/AMD GPU encoding).
 15. [ ] Implement an option to send image capture to Excalidraw before cropping for sketching.
 16. [ ] Show height and width of selected area.
-17. [ ] Implement backend integration to process and store the selected output path from the frontend file/directory picker dialog.
-18. [ ] Implement backend integration to control encoder settings from front-end (CRF, Bitrate, Preset, Tune, Profile, and enable Fast Start for playback).
+17. [X] Implement backend integration to process and store the selected output path from the frontend file/directory picker dialog.
+18. [X] Implement backend integration to control encoder settings from front-end (CRF, Bitrate, Preset, Tune, Profile, and enable Fast Start for playback).
 
 ### **Performance:**
 19. [ ] Optimize screen capture via DXGI Desktop Duplication API for performance (minimize frame skip).
