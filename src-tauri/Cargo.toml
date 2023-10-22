@@ -15,7 +15,7 @@ tauri-build = { version = "1.5.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.5.1", features = [ "shell-open", "system-tray", "devtools"] }
+tauri = { version = "1.5.2", features = [ "shell-open", "system-tray", "devtools"] }
 window-shadows = "0.2.1"
 tauri-plugin-positioner = { version = "1.0.4", features = ["system-tray"] }
 win_desktop_duplication =  { path = "../crates/win_desktop_duplication" }
@@ -27,11 +27,13 @@ video-rs =  { path = "../crates/video-rs", features = ["ndarray"] }
 # video-rs = { git = "https://github.com/oddity-ai/video-rs.git", features = ["ndarray"] }
 # ffmpeg-next = { version = "6.0.0", features = ["codec", "filter", "format", "software-resampling", "software-scaling"] }
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }   
+tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 log = "^0.4"
 anyhow = "1.0.75"
 ndarray = { version = "0.15" }
 
+# IMPORTANT: Do NOT update the 'windows' dependency version.
+# The version of 'windows' crate we're using should match the version that our current Tao (installed by Tauri) version is using.
 [dependencies.windows]
 version = "0.39.0"
 features = ["Win32_System_Com"]
