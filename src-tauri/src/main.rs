@@ -237,10 +237,6 @@ fn main() {
 
     let tray = SystemTray::new().with_menu(tray_menu);
 
-    // Create a Mutex of hashmaps for containg hotkeys and their respective states
-    // Spawn a thread with Hotkeys crate and make changes to hotkeys
-    // Find a way to access the hashmap from the tuari thread
-
     let app_state = AppState {
                         recording: Arc::new(Mutex::new(false))
                     };
