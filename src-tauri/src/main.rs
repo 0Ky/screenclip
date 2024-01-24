@@ -63,7 +63,9 @@ async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width:
     let mut last_display_time = Duration::new(0, 0);
     let start_time = Instant::now();
     let mut next_frame_time = start_time + frame_interval;
-    while !*recording.lock().unwrap() {
+    
+    *recording.lock().unwrap() = true;
+    while *recording.lock().unwrap() {
         let tex = dupl.acquire_next_vsync_frame().await;
         if Instant::now() >= next_frame_time && tex.is_ok() {
             let mut pic_data: Vec<u8> = vec![0; (width * height * 4) as usize];
@@ -332,7 +334,6 @@ fn main() {
                 .global_shortcut_manager()
                 .register("CommandOrControl+Shift+D", move || {
                     region_selection_window(&app_handle);
-                    println!("FIRED");
                 }); // Handle hotkey register error, else it will panic
                 app_handle2                
                     .global_shortcut_manager()
@@ -342,7 +343,6 @@ fn main() {
                          *a = !*a;       
                     } else {
                         region_video_capture(&app_handle2);
-                        *a=true;
                     }
                 })
                 .unwrap();
