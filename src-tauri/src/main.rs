@@ -24,6 +24,7 @@ use video_rs::{Encoder, EncoderSettings, Locator, Options, PixelFormat, RawFrame
 use anyhow::Result;
 use ndarray::Array3;
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use tauri_plugin_store::StoreBuilder;
 use tauri_plugin_log::{LogTarget};
 
@@ -54,7 +55,7 @@ fn encode_frames(output_directory: &str, frames: Vec<Vec<u8>>, width: u32, heigh
     Ok(())
 }
 
-async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width: u32, height: u32, fps: u32) -> Result<Vec<Vec<u8>>> {
+async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width: u32, height: u32, fps: u32,  recording: Arc<Mutex<bool>>) -> Result<Vec<Vec<u8>>> {
     let (device, ctx) = dupl.get_device_and_ctx();
     let mut texture_reader = TextureReader::new(device, ctx);
     let mut frames: Vec<Vec<u8>> = vec![];
@@ -62,7 +63,9 @@ async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width:
     let mut last_display_time = Duration::new(0, 0);
     let start_time = Instant::now();
     let mut next_frame_time = start_time + frame_interval;
-    while Instant::now() - start_time < Duration::from_secs(10) {
+    
+    *recording.lock().unwrap() = true;
+    while *recording.lock().unwrap() {
         let tex = dupl.acquire_next_vsync_frame().await;
         if Instant::now() >= next_frame_time && tex.is_ok() {
             let mut pic_data: Vec<u8> = vec![0; (width * height * 4) as usize];
@@ -74,7 +77,7 @@ async fn capture_frames(dupl: &mut DesktopDuplicationApi, x: u32, y: u32, width:
     Ok(frames)
 }
 
-async fn capture_video(x: u32, y: u32, width: u32, height: u32, fps_store: u32, crf_store: u32, output_store: &str, app: &AppHandle) {
+async fn capture_video(x: u32, y: u32, width: u32, height: u32, fps_store: u32, crf_store: u32, output_store: &str, app: &AppHandle, state: Arc<Mutex<bool>>) {
     let width = if width % 2 != 0 { width - 1 } else { width };
     let height = if height % 2 != 0 { height - 1 } else { height };
     set_process_dpi_awareness();
@@ -83,7 +86,7 @@ async fn capture_video(x: u32, y: u32, width: u32, height: u32, fps_store: u32, 
     let output = adapter.get_display_by_idx(0).unwrap();
     let display_mode = output.get_current_display_mode().unwrap();
     let mut dupl = DesktopDuplicationApi::new(adapter, output).unwrap();
-    match capture_frames(&mut dupl, x, y, width, height, fps_store).await {
+    match capture_frames(&mut dupl, x, y, width, height, fps_store, state).await {
         Ok(frames) => {
             match encode_frames(output_store, frames, width, height, fps_store, crf_store) {
                 Ok(()) => {
@@ -99,13 +102,13 @@ async fn capture_video(x: u32, y: u32, width: u32, height: u32, fps_store: u32, 
 }
 
 #[tauri::command]
-fn video_capture(x: u32, y: u32, width: u32, height: u32, fps: u32, crf: u32, output: &str, app_handle: tauri::AppHandle) {
+fn video_capture(x: u32, y: u32, width: u32, height: u32, fps: u32, crf: u32, output: &str, app_handle: tauri::AppHandle, state: tauri::State<AppState>) {
     let output_store_cloned = output.to_string();
-
     println!("X {}, Y {}, WIDTH {}, HEIGHT {}, FPS {}, CRF {}, OUTPUT PATH {}", x,y,width,height,fps,crf,&output_store_cloned);
 
+    let recording = state.recording.clone();
     tauri::async_runtime::spawn(async move {
-        capture_video(x, y, width, height, fps, crf, &output_store_cloned, &app_handle).await;
+        capture_video(x, y, width, height, fps, crf, &output_store_cloned, &app_handle, recording).await;
     });
 }
 
@@ -155,7 +158,7 @@ fn region_quick_capture(app: &AppHandle) {
     window.emit("quickshot-data", base64_string).unwrap();
 }
 
-fn region_video_capture(app: &AppHandle) {
+fn region_video_capture(app: &AppHandle)  {
     let (pos_x, pos_y) = mouse_location();
     println!("{:?},{:?} ", pos_x, pos_y);
     let display_info = DisplayInfo::from_point(pos_x as i32, pos_y as i32).unwrap();
@@ -210,7 +213,13 @@ fn tray_events(app: &AppHandle, event: SystemTrayEvent) {
     }
 }
 
+#[derive(Clone)]
+struct AppState {
+    recording: Arc<Mutex<bool>>,
+}
+
 fn main() {
+    
     let sub_menu_capture = {
         let mut menu = SystemTrayMenu::new();
         menu = menu
@@ -228,7 +237,11 @@ fn main() {
 
     let tray = SystemTray::new().with_menu(tray_menu);
 
+    let app_state = AppState {
+                        recording: Arc::new(Mutex::new(false))
+                    };
     tauri::Builder::default()
+        .manage(app_state.clone())
         .setup(|app| {
 
             let default_settings = HashMap::from([
@@ -240,8 +253,9 @@ fn main() {
             .defaults(default_settings)
             .build();
 
-            let app_handle = app.handle();
 
+           let app_handle = app.handle();
+                   
             std::thread::spawn(move || {
                 app_handle.plugin(tauri_plugin_store::Builder::default()
                     .stores([settings])
@@ -266,6 +280,7 @@ fn main() {
             .disable_file_drop_handler()
             .build()
             .unwrap();
+            region_select_window.open_devtools();
 
             let excalidraw_window = tauri::WindowBuilder::new(
                 app,
@@ -283,8 +298,7 @@ fn main() {
             .disable_file_drop_handler()
             .build()
             .unwrap();
-
-
+          
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![video_capture])
@@ -306,19 +320,36 @@ fn main() {
         })
         .build(tauri::generate_context!())
         .expect("error while running tauri application")
-        .run(|app_handle, event| match event {
+        .run(move |app_handle, event|{
+           match event {
             RunEvent::Ready => {
                 let app_handle = app_handle.clone();
+                let app_handle2 = app_handle.clone();
+                let app_statei = app_state.clone();
                 app_handle
                 .global_shortcut_manager()
-                .register("PrintScreen", move || {
+                .register("CommandOrControl+Shift+D", move || {
                     region_selection_window(&app_handle);
-                }) // Handle hotkey register error, else it will panic
+                }); // Handle hotkey register error, else it will panic
+                app_handle2                
+                    .global_shortcut_manager()
+                    .register("CommandOrControl+Shift+R", move || {
+                    let mut a=app_statei.recording.lock().unwrap(); 
+                    if *a {
+                         *a = !*a;       
+                    } else {
+                        region_video_capture(&app_handle2);
+                    }
+                })
                 .unwrap();
+                print!("Ready and registered");
             }
             tauri::RunEvent::ExitRequested { api, .. } => {
                 api.prevent_exit();
             }
             _ => {}
+          }
         });
+
+    print!("This is text");
 }
